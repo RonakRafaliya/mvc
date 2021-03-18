@@ -80,6 +80,6 @@ class Admin
         $final = array_merge($final, $prams);
         $queryString = http_build_query($final);
         unset($final);
-        return "http://localhost/PHP-Project/Cybercom/index.php?{$queryString}";
+        return "http://localhost/Cybercom/index.php?{$queryString}";
     }
 }
