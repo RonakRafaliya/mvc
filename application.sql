@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2021 at 01:55 PM
+-- Generation Time: Mar 22, 2021 at 09:11 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -58,7 +58,7 @@ CREATE TABLE `admin` (
   `adminId` int(11) NOT NULL,
   `username` varchar(250) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `status` varchar(11) NOT NULL DEFAULT 'Enable',
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -67,10 +67,10 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`adminId`, `username`, `password`, `status`, `createdDate`) VALUES
-(1, 'rrafaliya14', '8f6c703e75d3c458660644b8478d3476', 'Disable', '2021-02-25 10:26:46'),
-(2, 'Ravi.savaliya', '32250170a0dca92d53ec9624f336ca24', 'Enable', '2021-03-10 10:34:00'),
-(4, 'itsAk', '0fcb4b2caf0935b60a9dd3d7824233e1', 'Disable', '2021-03-17 01:34:25'),
-(5, 'visarg', '1b92ff7d839c7ee76a3d55db23a82402', 'Disable', '2021-03-18 01:41:46');
+(1, 'rrafaliya14', '8f6c703e75d3c458660644b8478d3476', 0, '2021-02-25 10:26:46'),
+(2, 'Ravi.savaliya', '32250170a0dca92d53ec9624f336ca24', 1, '2021-03-10 10:34:00'),
+(4, 'itsAk', '0fcb4b2caf0935b60a9dd3d7824233e1', 1, '2021-03-17 01:34:25'),
+(5, 'visarg', '1b92ff7d839c7ee76a3d55db23a82402', 0, '2021-03-18 01:41:46');
 
 -- --------------------------------------------------------
 
@@ -125,6 +125,31 @@ INSERT INTO `attribute_option` (`optionId`, `name`, `attributeId`, `sortOrder`) 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `brand`
+--
+
+CREATE TABLE `brand` (
+  `brandId` int(11) NOT NULL,
+  `brandName` varchar(255) NOT NULL,
+  `brandImage` varchar(255) NOT NULL,
+  `sortOrder` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `createdDate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `brand`
+--
+
+INSERT INTO `brand` (`brandId`, `brandName`, `brandImage`, `sortOrder`, `status`, `createdDate`) VALUES
+(1, 'Godrej Interio', '1616258949-3759-godrej.jfif', 1, 0, '2021-03-20 22:27:15'),
+(2, 'Usha', '1616258987-3326-usha.png', 2, 0, '2021-03-20 22:27:15'),
+(3, 'Ikea', '1616259063-4734-ikea.png', 3, 0, '2021-03-20 22:27:15'),
+(4, 'Raymond', '1616319794-3149-raymond.png', 4, 0, '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `category`
 --
 
@@ -132,7 +157,7 @@ CREATE TABLE `category` (
   `categoryId` int(11) NOT NULL,
   `parentId` int(11) DEFAULT NULL,
   `name` varchar(30) NOT NULL,
-  `status` varchar(10) NOT NULL,
+  `status` tinyint(1) NOT NULL,
   `description` text NOT NULL,
   `pathId` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -142,14 +167,39 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`categoryId`, `parentId`, `name`, `status`, `description`, `pathId`) VALUES
-(1, 0, 'Bedroom', 'Enable', '', '1'),
-(2, 1, 'Bed', 'Enable', '', '1/2'),
-(3, 2, 'Panelbed', 'Enable', '', '1/2/3'),
-(4, 3, 'header', 'Enable', '', '1/2/3/4'),
-(5, 3, 'footer', 'Enable', '', '1/2/3/5'),
-(6, 0, 'Sofa', 'Enable', '', '6'),
-(7, 6, 'justSofa', 'Enable', '', '6/7'),
-(8, 0, 'Livingroom', 'Enable', '', '8');
+(1, 0, 'Bedroom', 1, '', '1'),
+(2, 1, 'Bed', 0, '', '1/2'),
+(3, 2, 'Panelbed', 1, '', '1/2/3'),
+(4, 3, 'header', 0, '', '1/2/3/4'),
+(5, 3, 'footer', 1, '', '1/2/3/5'),
+(6, 0, 'Sofa', 0, '', '6'),
+(8, 0, 'Livingroom', 1, '', '8');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categorymedia`
+--
+
+CREATE TABLE `categorymedia` (
+  `imageId` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `label` varchar(70) NOT NULL,
+  `icon` tinyint(1) NOT NULL,
+  `base` tinyint(1) NOT NULL,
+  `banner` tinyint(1) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `categoryId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `categorymedia`
+--
+
+INSERT INTO `categorymedia` (`imageId`, `image`, `label`, `icon`, `base`, `banner`, `status`, `categoryId`) VALUES
+(1, '1616395798-1256-royalbed.jfif', 'Royal Bed', 1, 0, 1, 0, 1),
+(2, '1616395859-2394-bed.jfif', '', 0, 0, 0, 1, 2),
+(3, '1616396779-2658-bed.jfif', 'Simple Bed', 0, 0, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -162,7 +212,7 @@ CREATE TABLE `cms` (
   `title` varchar(50) NOT NULL,
   `indentifier` varchar(255) NOT NULL,
   `content` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -173,7 +223,7 @@ CREATE TABLE `cms` (
 INSERT INTO `cms` (`pageId`, `title`, `indentifier`, `content`, `status`, `createdDate`) VALUES
 (1, 'Html', '123456', '<p><strong>hello</strong></p>', 0, '2021-03-08 13:25:54'),
 (2, 'Php', '452', '<p><strong><em><a href=\"tel:9724881681\">echo</a>&nbsp;</em>&quot;Ronak&quot;</strong></p>', 1, '2021-03-08 13:34:11'),
-(3, 'For user', 'About Us', '<p><a href=\"mailto:ronspatel13@gmail.com?subject=Just%20Chill&amp;body=Hello%20Ronak%2C%20Today%20is%20Holiday\"><strong>Hello users, Welcome To RonsCart.</strong></a></p>', 1, '2021-03-10 12:41:09'),
+(3, 'For user', 'About Us', '<p><a href=\"mailto:vaibhav98patel@gmail.com?subject=Welcome&amp;body=Hello%20Vaibhav%2C%20Thanks%20For%20choosing%20Us.\"><strong>Hello users, Welcome To RonsCart.</strong></a></p>', 1, '2021-03-10 12:41:09'),
 (5, 'AboutUs', '14', '<p><strong>Hey Ronak Finally Done, Now You Can Do it.</strong></p>', 0, '2021-03-17 01:49:25');
 
 -- --------------------------------------------------------
@@ -185,7 +235,7 @@ INSERT INTO `cms` (`pageId`, `title`, `indentifier`, `content`, `status`, `creat
 CREATE TABLE `customergroup` (
   `groupId` int(11) NOT NULL,
   `groupName` varchar(255) NOT NULL,
-  `status` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -194,10 +244,11 @@ CREATE TABLE `customergroup` (
 --
 
 INSERT INTO `customergroup` (`groupId`, `groupName`, `status`, `createdDate`) VALUES
-(1, 'Retail', 'Enable', '2021-03-10 20:26:46'),
-(2, 'Wholesale', 'Enable', '2021-03-10 22:53:44'),
-(5, 'Group 2', 'Disable', '2021-03-11 22:19:32'),
-(6, 'Group  3', 'Enable', '2021-03-11 22:19:35');
+(1, 'Retail', 1, '2021-03-10 20:26:46'),
+(2, 'Wholesale', 0, '2021-03-10 22:53:44'),
+(5, 'Group 2', 0, '2021-03-11 22:19:32'),
+(6, 'Group  3', 1, '2021-03-11 22:19:35'),
+(21, 'group4', 0, '2021-03-21 15:15:19');
 
 -- --------------------------------------------------------
 
@@ -213,7 +264,7 @@ CREATE TABLE `customers` (
   `mobilenu` varchar(15) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `status` varchar(7) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdDate` datetime NOT NULL,
   `updatedDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -223,9 +274,9 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customerId`, `groupId`, `firstname`, `lastname`, `mobilenu`, `email`, `password`, `status`, `createdDate`, `updatedDate`) VALUES
-(1, 1, 'Ronak', 'Rafaliya', '09724881681', 'Ronakrafaliya14@gmail.com', 'dc06698f0e2e75751545455899adccc3', 'Enable', '2021-03-10 23:03:27', '2021-03-10 11:04:02'),
-(2, 2, 'Naeem', 'Valiyani', '9878645789', 'NaeemValiyani@gmail.com', 'b4af804009cb036a4ccdc33431ef9ac9', 'Disable', '2021-03-10 23:04:34', '0000-00-00 00:00:00'),
-(3, 5, 'Saurabh', 'Tripathi', '78596788496', 'saurabh@gmail.com', 'dea4e2bd0f244d3f84a5347e84d3a3f2', 'Disable', '2021-03-17 00:20:17', '2021-03-17 12:20:30');
+(1, 1, 'Ronak', 'Rafaliya', '09724881681', 'Ronakrafaliya14@gmail.com', 'dc06698f0e2e75751545455899adccc3', 1, '2021-03-10 23:03:27', '2021-03-10 11:04:02'),
+(2, 2, 'Naeem', 'Valiyani', '9878645789', 'NaeemValiyani@gmail.com', 'b4af804009cb036a4ccdc33431ef9ac9', 0, '2021-03-10 23:04:34', '0000-00-00 00:00:00'),
+(3, 5, 'Saurabh', 'Tripathi', '78596788496', 'saurabh@gmail.com', 'dea4e2bd0f244d3f84a5347e84d3a3f2', 1, '2021-03-17 00:20:17', '2021-03-17 12:20:30');
 
 -- --------------------------------------------------------
 
@@ -238,7 +289,7 @@ CREATE TABLE `payment` (
   `name` varchar(50) NOT NULL,
   `code` varchar(50) NOT NULL,
   `description` varchar(700) NOT NULL,
-  `status` varchar(15) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -247,9 +298,11 @@ CREATE TABLE `payment` (
 --
 
 INSERT INTO `payment` (`methodId`, `name`, `code`, `description`, `status`, `createdDate`) VALUES
-(1, 'Ronak Rafaliya', '1418', 'Smart Watches', 'Disable', '2021-02-18 12:13:07'),
-(2, 'Ravi Patel', '01485', 'Mobile Phone', 'Enable', '2021-02-24 10:17:49'),
-(8, 'Aryan Kanani', '78458', 'Suitcase', 'Disable', '2021-03-10 23:33:42');
+(1, 'Ronak', '1418', 'Smart Watches', 0, '2021-02-18 12:13:07'),
+(2, 'Ravi Patel', '01485', 'Mobile Phone', 1, '2021-02-24 10:17:49'),
+(8, 'Aryan Kanani', '78458', 'Suitcase', 1, '2021-03-10 23:33:42'),
+(9, 'Keval', '1245', 'tables', 0, '2021-03-20 12:18:24'),
+(10, 'Ronak', '45862', 'Apple Iphon 12', 0, '2021-03-23 01:23:41');
 
 -- --------------------------------------------------------
 
@@ -259,13 +312,14 @@ INSERT INTO `payment` (`methodId`, `name`, `code`, `description`, `status`, `cre
 
 CREATE TABLE `product` (
   `productId` int(11) NOT NULL,
+  `brandId` int(11) NOT NULL,
   `sku` varchar(20) NOT NULL,
   `name` varchar(30) NOT NULL,
   `price` int(50) NOT NULL,
   `discount` int(50) NOT NULL,
   `quantity` int(50) NOT NULL,
   `description` varchar(50) NOT NULL,
-  `status` varchar(50) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdDate` datetime NOT NULL,
   `updatedDate` datetime NOT NULL,
   `brand` varchar(255) DEFAULT NULL,
@@ -277,12 +331,12 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`productId`, `sku`, `name`, `price`, `discount`, `quantity`, `description`, `status`, `createdDate`, `updatedDate`, `brand`, `color`, `size`) VALUES
-(14, '9', 'Laptop', 120000, 1200, 3, 'Dell,Lenovo,Hp,Asus', 'Disable', '2021-02-19 07:01:00', '2021-03-11 07:37:35', NULL, NULL, NULL),
-(55, '200', 'Footwear', 12000, 120, 10, 'Nike, Adidas,Puma', 'Enable', '2021-03-09 19:26:26', '2021-03-16 01:56:41', NULL, NULL, NULL),
-(57, '10', 'NoteBook', 750, 120, 6, 'amzon ', 'Enable', '2021-03-10 10:30:31', '2021-03-10 04:53:16', NULL, NULL, NULL),
-(59, '200', 'Footwear', 15000, 120, 20, 'Nike, Adidas,Puma', 'Disable', '2021-03-16 17:42:13', '0000-00-00 00:00:00', NULL, NULL, NULL),
-(60, '200', 'Teddy Bear', 15000, 120, 6, 'Large', 'Disable', '2021-03-16 18:21:30', '0000-00-00 00:00:00', NULL, NULL, NULL);
+INSERT INTO `product` (`productId`, `brandId`, `sku`, `name`, `price`, `discount`, `quantity`, `description`, `status`, `createdDate`, `updatedDate`, `brand`, `color`, `size`) VALUES
+(61, 1, '10', 'NoteBook', 750, 20, 5, 'flipcart', 1, '2021-03-19 18:32:37', '0000-00-00 00:00:00', '', '', 0),
+(62, 3, '11', 'laptop', 75000, 1500, 2, 'all can buy this laptop', 0, '2021-03-18 19:24:59', '0000-00-00 00:00:00', '', '', 0),
+(63, 2, '11', 'laptop', 75000, 1500, 2, 'all can buy this laptop', 1, '2021-03-18 19:24:59', '0000-00-00 00:00:00', '', '', 0),
+(64, 3, '11', 'laptop', 1410000, 1500, 2, 'all can buy this laptop', 0, '2021-03-18 19:24:59', '2021-03-20 11:17:34', '', '', 0),
+(68, 1, '78', 'Footwear', 1200, 20, 5, 'Nike, Adidas,Puma', 1, '2021-03-19 23:35:12', '0000-00-00 00:00:00', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -306,12 +360,10 @@ CREATE TABLE `productmedia` (
 --
 
 INSERT INTO `productmedia` (`imageId`, `image`, `label`, `small`, `thumb`, `base`, `gallary`, `productId`) VALUES
-(7, 'shoes.jfif', 'image1', 1, 0, 0, 1, 14),
-(12, 'tshirt.jfif', 'image2', 0, 1, 0, 1, 14),
-(13, 'nike.jfif', 'nikeShoes', 1, 1, 0, 1, 55),
-(14, 'shoes.jfif', 'pumaShoes', 0, 0, 1, 1, 55),
-(21, '1616009937-5463-small.jfif', 'image3', 0, 0, 1, 1, 14),
-(22, '1616052784-3831-nike.jfif', '', 0, 0, 0, 0, 14);
+(1, '1616268449-4987-small.jfif', 'T-shirt', 1, 1, 1, 1, 62),
+(2, '1616319690-9654-small.jfif', '', 0, 0, 0, 0, 61),
+(3, '1616395640-1127-royalbed.jfif', '', 0, 0, 0, 0, 1),
+(4, '1616395645-1057-royalbed.jfif', '', 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -341,7 +393,11 @@ INSERT INTO `product_group_price` (`entityId`, `productId`, `customerGroupId`, `
 (8, 55, 7, '0'),
 (9, 14, 5, '7890'),
 (10, 55, 6, '1100'),
-(11, 55, 8, '450');
+(11, 55, 8, '450'),
+(12, 61, 1, '950'),
+(13, 61, 2, '850'),
+(14, 61, 5, '1100'),
+(15, 61, 6, '1200');
 
 -- --------------------------------------------------------
 
@@ -355,7 +411,7 @@ CREATE TABLE `shipping` (
   `code` int(50) NOT NULL,
   `amount` int(50) NOT NULL,
   `description` varchar(50) NOT NULL,
-  `status` varchar(50) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
   `createdDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -364,9 +420,9 @@ CREATE TABLE `shipping` (
 --
 
 INSERT INTO `shipping` (`methodId`, `name`, `code`, `amount`, `description`, `status`, `createdDate`) VALUES
-(1, 'Rons Patel', 15078, 40000, 'Smart Watches', 'Enable', '2021-02-17 11:37:35'),
-(2, 'bhargavi', 15748, 54200, 'Laptop', 'Disable', '2021-02-17 11:48:19'),
-(4, 'Ravi', 882703, 54200, 'Mobile Phone', 'Enable', '2021-02-18 10:19:37');
+(1, 'Rons Patel', 15078, 40000, 'Smart Watches', 0, '2021-02-17 11:37:35'),
+(2, 'bhargavi', 15748, 54200, 'Laptop', 1, '2021-02-17 11:48:19'),
+(4, 'Ravi', 882703, 54200, 'Mobile Phone', 0, '2021-02-18 10:19:37');
 
 --
 -- Indexes for dumped tables
@@ -398,10 +454,22 @@ ALTER TABLE `attribute_option`
   ADD KEY `attributeId` (`attributeId`);
 
 --
+-- Indexes for table `brand`
+--
+ALTER TABLE `brand`
+  ADD PRIMARY KEY (`brandId`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`categoryId`);
+
+--
+-- Indexes for table `categorymedia`
+--
+ALTER TABLE `categorymedia`
+  ADD PRIMARY KEY (`imageId`);
 
 --
 -- Indexes for table `cms`
@@ -482,10 +550,22 @@ ALTER TABLE `attribute_option`
   MODIFY `optionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
+-- AUTO_INCREMENT for table `brand`
+--
+ALTER TABLE `brand`
+  MODIFY `brandId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
   MODIFY `categoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `categorymedia`
+--
+ALTER TABLE `categorymedia`
+  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `cms`
@@ -497,7 +577,7 @@ ALTER TABLE `cms`
 -- AUTO_INCREMENT for table `customergroup`
 --
 ALTER TABLE `customergroup`
-  MODIFY `groupId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `groupId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -509,25 +589,25 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `methodId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `methodId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `productmedia`
 --
 ALTER TABLE `productmedia`
-  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `product_group_price`
 --
 ALTER TABLE `product_group_price`
-  MODIFY `entityId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `entityId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `shipping`
